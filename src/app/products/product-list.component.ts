@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { IProduct } from './IProduct';
 
 const products: IProduct[] = [{
@@ -19,7 +19,8 @@ const products: IProduct[] = [{
     "description": "15 gallon capacity rolling garden cart",
     "price": 32.99,
     "starRating": 4.2,
-    "imageUrl": "assets/images/garden_cart.png"
+    "imageUrl": "assets/images/garden_cart.png",
+
   },
   {
     "productId": 5,
@@ -34,15 +35,37 @@ const products: IProduct[] = [{
 
 @Component({
     selector: 'pm-products',
-    templateUrl: './product-list.component.html'
+    templateUrl: './product-list.component.html',
+    styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit{
     imageWidth: number = 50;
     imageMargin: number = 2;
     showImage: boolean = false;
     pageTitle: string = 'Product List';
     products: IProduct[] = products
-    listFilter: string = 'cart';
+    filteredProducts: IProduct[] = []
+    _listFilter: string;
 
-    public toggleImage = ():void => { this.showImage = !this.showImage }
+    constructor() {
+        this.filteredProducts = this.products;
+        this.listFilter = 'cart';
+    }
+
+    get listFilter():string {
+        return this._listFilter;
+    }
+
+    set listFilter(value: string) {
+        this._listFilter = value;
+        this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products
+    }
+
+    private performFilter = (filter: string): IProduct[] =>{
+        filter = filter.toLocaleLowerCase();
+        return this.products.filter((p) => p.productName.toLowerCase().includes(filter))
+    }
+
+    public toggleImage():void { this.showImage = !this.showImage }
+    public ngOnInit():void { console.log('in OnInit.') }
 }
