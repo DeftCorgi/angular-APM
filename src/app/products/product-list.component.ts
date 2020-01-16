@@ -44,7 +44,7 @@ export class ProductListComponent implements OnInit{
     showImage: boolean = false;
     pageTitle: string = 'Product List';
     products: IProduct[] = products
-    filteredProducts: IProduct[] = []
+    filteredProducts: IProduct[];
     _listFilter: string;
 
     constructor() {
